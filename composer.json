@@ -1,0 +1,17 @@
+{
+    "name": "GeeH/Blitzen",
+    "description": "Microframework based on Dash router and ZF2 components",
+    "minimum-stability": "dev",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Gary Hockin",
+            "email": "gary@roave.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Blitzen": "src/"
+        }
+    }
+}
