@@ -70,7 +70,33 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testGoGoGoWith200()
     {
-        $application = new Application([], ['foo' => ['/']]);
+        $config = ['foo' => ['/', 'gobblers', 'Gobblers\Knob']];
+
+        $application = new Application(
+            [], $config, [
+                'factories' => [
+                    'Gobblers\Knob' => function () {
+                        return 'Punxatawny';
+                    }
+                ]
+            ]
+        );
+//
+//        $routeManager = $this->getMockBuilder('Dash\Router\Http\Route\RouteManager')
+//            ->disableOriginalConstructor()
+//            ->getMock();
+//
+//        $serviceManager = $this->getMockBuilder('Zend\ServiceManager\ServiceManager')
+//            ->disableOriginalConstructor()
+//            ->setMethods(['get'])
+//            ->getMock();
+//
+//        $serviceManager->expects($this->atLeastOnce())
+//            ->method('get')
+//            ->will($this->onConsecutiveCalls($routeManager, ['dash_router' => ['routes' => $config]]));
+//
+//        $application->setServiceLocator($serviceManager);
+
         $application->goGoGo();
         $this->assertEquals(200, $application->getResponse()->getStatusCode());
     }

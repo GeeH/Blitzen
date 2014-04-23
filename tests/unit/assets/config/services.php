@@ -1,4 +1,9 @@
 <?php
 return [
-    'Gobblers\Knob' => 'Punxytawny'
+    'Gobblers\Knob' => 'Punxytawny',
+    'factories' => [
+        'knob' => function () {
+            return 'punxatawny';
+        }
+    ],
 ];

@@ -167,6 +167,7 @@ class Application
             $httpResponseSender->sendHeaders($this->getResponse());
             return false;
         }
+
         $this->dispatch();
 
         $httpResponseSender->sendHeaders($this->getResponse());
@@ -231,7 +232,6 @@ class Application
      */
     protected function getServiceLocator()
     {
-
         if ($this->serviceLocator instanceof ServiceManager) {
             return $this->serviceLocator;
         }
@@ -257,6 +257,14 @@ class Application
 
         $this->serviceLocator = $serviceLocator;
         return $serviceLocator;
+    }
+
+    /**
+     * @param ServiceManager $serviceLocator
+     */
+    public function setServiceLocator(ServiceManager $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
