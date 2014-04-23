@@ -2,6 +2,8 @@
 
 namespace Blitzen;
 
+use Blitzen\Controller\BaseController;
+use Dash\Router\Http\MatchResult\SuccessfulMatch;
 use Dash\Router\Http\Parser\ParserManager;
 use Dash\Router\Http\Route\RouteManager;
 use Dash\Router\Http\Router;
@@ -9,6 +11,7 @@ use Dash\Router\Http\RouterFactory;
 use Dash\Router\MatchResult\MatchResultInterface;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Http\PhpEnvironment\Response;
+use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
 class Application
@@ -41,6 +44,10 @@ class Application
      * @var MatchResultInterface
      */
     protected $routeResult;
+    /**
+     * @var ServiceManager
+     */
+    protected $serviceLocator;
 
     /**
      * @param array $options
@@ -52,22 +59,6 @@ class Application
         $this->options = $options;
         $this->routes = $routes;
         $this->services = $services;
-    }
-
-    /**
-     * @return MatchResultInterface
-     */
-    public function getRouteResult()
-    {
-        return $this->routeResult;
-    }
-
-    /**
-     * @param MatchResultInterface $routeResult
-     */
-    public function setRouteResult(MatchResultInterface $routeResult)
-    {
-        $this->routeResult = $routeResult;
     }
 
     /**
@@ -143,26 +134,6 @@ class Application
     }
 
     /**
-     * Returns all service declarations
-     *
-     * @return array
-     */
-    public function getServices()
-    {
-        return $this->services;
-    }
-
-    /**
-     * Sets all service declarations
-     *
-     * @param array $services
-     */
-    public function setServices(array $services)
-    {
-        $this->services = $services;
-    }
-
-    /**
      * Sets single service declaration by it's named key
      *
      * @param $serviceName  Service Named key
@@ -190,8 +161,17 @@ class Application
 
     public function goGoGo()
     {
+        $httpResponseSender = new HttpResponseSender();
         $this->bootstrap();
-        $this->route();
+        if (!$this->route()) {
+            $httpResponseSender->sendHeaders($this->getResponse());
+            return false;
+        }
+        $this->dispatch();
+
+        $httpResponseSender->sendHeaders($this->getResponse());
+        $httpResponseSender->sendContent($this->getResponse());
+
         return true;
     }
 
@@ -200,13 +180,13 @@ class Application
      */
     protected function bootstrap()
     {
-        if (!is_a('Dash\Router\Router', $this->router)) {
+        if (!($this->router instanceof Router)) {
             $this->router = $this->createRouterFromConfig();
         }
-        if (!is_a('Zend\Http\PhpEnvironment\Request', $this->request)) {
+        if (!($this->request instanceof Request)) {
             $this->request = new Request();
         }
-        if (!is_a('Zend\Http\PhpEnvironment\Request', $this->response)) {
+        if (!($this->response instanceof Response)) {
             $this->response = new Response();
         }
     }
@@ -251,7 +231,12 @@ class Application
      */
     protected function getServiceLocator()
     {
-        $serviceLocator = new ServiceManager();
+
+        if ($this->serviceLocator instanceof ServiceManager) {
+            return $this->serviceLocator;
+        }
+        $config = new Config($this->getServices());
+        $serviceLocator = new ServiceManager($config);
 
         $routeManager = new RouteManager();
         $routeManager->setServiceLocator($serviceLocator);
@@ -270,7 +255,28 @@ class Application
             ]
         );
 
+        $this->serviceLocator = $serviceLocator;
         return $serviceLocator;
+    }
+
+    /**
+     * Returns all service declarations
+     *
+     * @return array
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    /**
+     * Sets all service declarations
+     *
+     * @param array $services
+     */
+    public function setServices(array $services)
+    {
+        $this->services = $services;
     }
 
     /**
@@ -280,19 +286,20 @@ class Application
      */
     protected function route()
     {
-        if(is_a($this->getRouteResult(), 'Dash\Router\MatchResult\MatchResultInterface')) {
+        if ($this->getRouteResult() instanceof \Dash\Router\MatchResult\MatchResultInterface) {
             return false;
         }
 
         $routeResult = $this->getRouter()->match($this->getRequest());
 
-        if (is_a($routeResult, ' Dash\Router\MatchResult\UnsuccessfulMatch')) {
+        if ($routeResult instanceof \Dash\Router\MatchResult\UnsuccessfulMatch) {
             // Unsuccessful Match = 404
-            $this->getResponse->setStatusCode(404);
+            $this->getResponse()->setStatusCode(404);
+            $this->getResponse()->setReasonPhrase('Page not found');
             return false;
         }
 
-        if (is_a($routeResult, 'Dash\Router\Http\MatchResult\MethodNotAllowed')) {
+        if ($routeResult instanceof \Dash\Router\Http\MatchResult\MethodNotAllowed) {
             // Method Not Allowed = 405
             $this->getResponse()->setStatusCode(405);
             $this->getResponse()->setReasonPhrase('Method not allowed');
@@ -305,6 +312,22 @@ class Application
         $this->setRouteResult($routeResult);
 
         return true;
+    }
+
+    /**
+     * @return MatchResultInterface
+     */
+    public function getRouteResult()
+    {
+        return $this->routeResult;
+    }
+
+    /**
+     * @param MatchResultInterface $routeResult
+     */
+    public function setRouteResult(MatchResultInterface $routeResult)
+    {
+        $this->routeResult = $routeResult;
     }
 
     /**
@@ -353,5 +376,33 @@ class Application
     public function setResponse(Response $response)
     {
         $this->response = $response;
+    }
+
+    protected function dispatch()
+    {
+        /** @var SuccessfulMatch $routeResult */
+        $routeResult = $this->getRouteResult();
+        $controllerKey = $routeResult->getParam('controller');
+        $controller = $this->getServiceLocator()->get($controllerKey);
+
+        // if the factory returns an object, we can try and dispatch the action
+        if ($controller instanceof BaseController) {
+            $action = $this->getRouteResult()->getParam('action');
+            $result = $controller->{$action}($this->getResponse(), $routeResult->getParams());
+        }
+
+        if (!isset($result)) {
+            $result = $controller;
+        }
+
+        if (is_string($result) || is_int($result)) {
+            $this->getResponse()->setContent($result);
+            return true;
+        }
+
+        $this->getResponse()->setContent(json_encode($result));
+        $this->getResponse()->getHeaders()->addHeaders(['Content-type' => 'application/json']);
+
+        return true;
     }
 } 

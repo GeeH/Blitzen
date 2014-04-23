@@ -110,7 +110,7 @@
 
  <body>
  <div class="layout">
- <h1>Codeception Results <small><span style="color: green">OK</span> (0.2s)</small></h1>
+ <h1>Codeception Results <small><span style="color: red">FAILED</span> (0.2s)</small></h1>
 
 
 	 <table border="0" style="width: 100%;">
@@ -146,7 +146,7 @@
 
    <tr>
     <td>
-     <p class="scenarioSuccess" onclick="showHide('3', this)">[+] Blitzen\ApplicationFactoryTest::testNotPassingOptionsTriesDefaultFile (0.01s)</p>
+     <p class="scenarioSuccess" onclick="showHide('3', this)">[+] Blitzen\ApplicationFactoryTest::testNotPassingOptionsTriesDefaultFile (0s)</p>
     </td>
    </tr>
    <tr>
@@ -172,7 +172,7 @@
 
    <tr>
     <td>
-     <p class="scenarioSuccess" onclick="showHide('5', this)">[+] Blitzen\ApplicationFactoryTest::testPassingRoutesStoresThoseRoutes (0s)</p>
+     <p class="scenarioSuccess" onclick="showHide('5', this)">[+] Blitzen\ApplicationFactoryTest::testPassingRoutesStoresThoseRoutes (0.01s)</p>
     </td>
    </tr>
    <tr>
@@ -211,7 +211,7 @@
 
    <tr>
     <td>
-     <p class="scenarioSuccess" onclick="showHide('8', this)">[+] Blitzen\ApplicationFactoryTest::testPassingServicesStoresThoseServices (0s)</p>
+     <p class="scenarioSuccess" onclick="showHide('8', this)">[+] Blitzen\ApplicationFactoryTest::testPassingServicesStoresThoseServices (0.01s)</p>
     </td>
    </tr>
    <tr>
@@ -237,7 +237,7 @@
 
    <tr>
     <td>
-     <p class="scenarioSuccess" onclick="showHide('10', this)">[+] Blitzen\ApplicationFactoryTest::testNotPassingServicesAndNoFileThrowsException (0.01s)</p>
+     <p class="scenarioSuccess" onclick="showHide('10', this)">[+] Blitzen\ApplicationFactoryTest::testNotPassingServicesAndNoFileThrowsException (0s)</p>
     </td>
    </tr>
    <tr>
@@ -263,7 +263,7 @@
 
    <tr>
     <td>
-     <p class="scenarioSuccess" onclick="showHide('12', this)">[+] Blitzen\ApplicationTest::testRouteSettersAndGetters (0.01s)</p>
+     <p class="scenarioSuccess" onclick="showHide('12', this)">[+] Blitzen\ApplicationTest::testRouteSettersAndGetters (0s)</p>
     </td>
    </tr>
    <tr>
@@ -276,7 +276,7 @@
 
    <tr>
     <td>
-     <p class="scenarioSuccess" onclick="showHide('13', this)">[+] Blitzen\ApplicationTest::testServiceSettersAndGetters (0.01s)</p>
+     <p class="scenarioSuccess" onclick="showHide('13', this)">[+] Blitzen\ApplicationTest::testServiceSettersAndGetters (0s)</p>
     </td>
    </tr>
    <tr>
@@ -302,7 +302,7 @@
 
    <tr>
     <td>
-     <p class="scenarioSuccess" onclick="showHide('15', this)">[+] Blitzen\ApplicationTest::testGoGoGo (0.03s)</p>
+     <p class="scenarioSuccess" onclick="showHide('15', this)">[+] Blitzen\ApplicationTest::testGoGoGoWith404 (0.06s)</p>
     </td>
    </tr>
    <tr>
@@ -315,7 +315,7 @@
 
    <tr>
     <td>
-     <p class="scenarioSuccess" onclick="showHide('16', this)">[+] Blitzen\HttpResponseSenderTest::testSendHeaders (0.05s)</p>
+     <p class="scenarioSuccess" onclick="showHide('16', this)">[+] Blitzen\ApplicationTest::testGoGoGoTwiceRoutesOnlyOnce (0.01s)</p>
     </td>
    </tr>
    <tr>
@@ -328,12 +328,51 @@
 
    <tr>
     <td>
-     <p class="scenarioSuccess" onclick="showHide('17', this)">[+] Blitzen\HttpResponseSenderTest::testSendBody (0.01s)</p>
+     <p class="scenarioSuccess" onclick="showHide('17', this)">[+] Blitzen\ApplicationTest::testGoGoGoWith405 (0.02s)</p>
     </td>
    </tr>
    <tr>
     <td>
      <table border="0" width="100%" class="scenarioSuccess scenarioStepsTable" id="stepContainer17">
+
+     </table>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     <p class="scenarioFailed" onclick="showHide('18', this)">[+] Blitzen\ApplicationTest::testGoGoGoWith200 (0.02s)</p>
+    </td>
+   </tr>
+   <tr>
+    <td>
+     <table border="0" width="100%" class="scenarioFailed scenarioStepsTable" id="stepContainer18">
+
+     </table>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     <p class="scenarioSuccess" onclick="showHide('19', this)">[+] Blitzen\HttpResponseSenderTest::testSendHeaders (0.04s)</p>
+    </td>
+   </tr>
+   <tr>
+    <td>
+     <table border="0" width="100%" class="scenarioSuccess scenarioStepsTable" id="stepContainer19">
+
+     </table>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     <p class="scenarioSuccess" onclick="showHide('20', this)">[+] Blitzen\HttpResponseSenderTest::testSendBody (0.01s)</p>
+    </td>
+   </tr>
+   <tr>
+    <td>
+     <table border="0" width="100%" class="scenarioSuccess scenarioStepsTable" id="stepContainer20">
 
      </table>
     </td>
@@ -347,11 +386,11 @@
       <table border="0">
        <tr>
         <td width="250" class="scenarioSuccess">Successful scenarios:</td>
-        <td class="scenarioSuccessValue"><strong>17</strong></td>
+        <td class="scenarioSuccessValue"><strong>19</strong></td>
        </tr>
        <tr>
         <td class="scenarioFailed">Failed scenarios:</td>
-        <td class="scenarioFailedValue"><strong>0</strong></td>
+        <td class="scenarioFailedValue"><strong>1</strong></td>
        </tr>
        <tr>
         <td class="scenarioSkipped">Skipped scenarios:</td>

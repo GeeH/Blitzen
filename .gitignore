@@ -1,3 +1,4 @@
 .idea
 vendor
 config/db.config.php
+tests/_log

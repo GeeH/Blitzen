@@ -9,4 +9,3 @@ include('vendor/autoload.php');
 
 $application = \Blitzen\ApplicationFactory::gimme();
 $application->goGoGo();
-pr($application->getRouteResult());

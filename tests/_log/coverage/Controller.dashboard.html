@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for /Users/garyhockin/www/blitzen/src/Blitzen</title>
+  <title>Dashboard for /Users/garyhockin/www/blitzen/src/Blitzen/Controller</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -18,7 +18,8 @@
     <div class="row">
      <div class="span12">
       <ul class="breadcrumb">
-        <li><a href="index.html">/Users/garyhockin/www/blitzen/src/Blitzen</a></li>
+        <li><a href="index.html">/Users/garyhockin/www/blitzen/src/Blitzen</a> <span class="divider">/</span></li>
+        <li><a href="Controller.html">Controller</a></li>
         <li class="active">(Dashboard)</li>
 
       </ul>
@@ -45,24 +46,13 @@
     <div class="span6">
      <h2>Top Project Risks</h2>
      <ul>
-              <li><a href="Application.php.html#17">Application</a> (65)</li>
-              <li><a href="HttpResponseSender.php.html#14">HttpResponseSender</a> (7)</li>
 
      </ul>
     </div>
     <div class="span6">
      <h2>Least Tested Methods</h2>
      <ul>
-              <li><a href="Application.php.html#376">Application::setResponse</a> (0%)</li>
               <li><a href="Controller_Index.php.html#14">Index::index</a> (0%)</li>
-              <li><a href="Application.php.html#360">Application::setRequest</a> (0%)</li>
-              <li><a href="Application.php.html#344">Application::setRouter</a> (0%)</li>
-              <li><a href="Application.php.html#381">Application::dispatch</a> (18%)</li>
-              <li><a href="Application.php.html#116">Application::getRoute</a> (66%)</li>
-              <li><a href="Application.php.html#153">Application::getService</a> (66%)</li>
-              <li><a href="Application.php.html#70">Application::getOption</a> (66%)</li>
-              <li><a href="Application.php.html#162">Application::goGoGo</a> (66%)</li>
-              <li><a href="HttpResponseSender.php.html#28">HttpResponseSender::sendHeaders</a> (83%)</li>
 
      </ul>
     </div>
@@ -89,7 +79,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([1,0,0,0,0,0,0,0,1,1,0,2], "Class Coverage"))
+      .datum(getCoverageDistributionData([1,0,0,0,0,0,0,0,0,0,0,1], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -141,7 +131,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([[76.991150442478,43,"<a href=\"Application.php.html#17\">Application<\/a>"],[100,16,"<a href=\"ApplicationFactory.php.html#6\">ApplicationFactory<\/a>"],[100,0,"<a href=\"Controller_BaseController.php.html#11\">BaseController<\/a>"],[0,1,"<a href=\"Controller_Index.php.html#12\">Index<\/a>"],[88.235294117647,7,"<a href=\"HttpResponseSender.php.html#14\">HttpResponseSender<\/a>"]], 'Class Complexity'))
+      .datum(getComplexityData([[100,0,"<a href=\"Controller_BaseController.php.html#11\">BaseController<\/a>"],[0,1,"<a href=\"Controller_Index.php.html#12\">Index<\/a>"]], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);

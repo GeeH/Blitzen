@@ -1,19 +1,9 @@
 <?php
 namespace Blitzen;
 
-use Zend\Uri\Http as HttpUri;
-
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-    }
 
-    protected function tearDown()
-    {
-    }
-
-    // tests
     public function testOptionSettersAndGetters()
     {
         $application = new Application();
@@ -23,15 +13,16 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('death', $application->getOptions());
     }
 
-
     public function testRouteSettersAndGetters()
     {
         $application = new Application();
-        $application->setRoute('death' , ['in front of train']);
+        $application->setRoute('death', ['in front of train']);
         $this->assertEquals(['in front of train'], $application->getRoute('death'));
         $application->setRoutes(['death' => 'in front of train']);
         $this->assertArrayHasKey('death', $application->getRoutes());
     }
+
+    // tests
 
     public function testServiceSettersAndGetters()
     {
@@ -49,13 +40,47 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $application->goGoGo();
     }
 
-    public function testGoGoGo()
+    public function testGoGoGoWith404()
     {
         $application = new Application([], ['foo' => ['/foo']]);
         $application->goGoGo();
         $this->assertInstanceOf('Dash\Router\Http\Router', $application->getRouter());
         $this->assertInstanceOf('Zend\Http\PhpEnvironment\Request', $application->getRequest());
         $this->assertInstanceOf('Zend\Http\PhpEnvironment\Response', $application->getResponse());
+        $this->assertEquals(404, $application->getResponse()->getStatusCode());
+    }
+
+
+    public function testGoGoGoTwiceRoutesOnlyOnce()
+    {
+        $application = new Application([], ['foo' => ['/foo']]);
+        $application->goGoGo();
+        $this->assertEquals(404, $application->getResponse()->getStatusCode());
+        $application->setRoutes(['foo' => ['/']]);
+        $application->goGoGo();
+        $this->assertEquals(404, $application->getResponse()->getStatusCode());
+    }
+
+    public function testGoGoGoWith405()
+    {
+        $application = new Application([], ['foo' => ['/', 'index', 'index', ['post']]]);
+        $application->goGoGo();
+        $this->assertEquals(405, $application->getResponse()->getStatusCode());
+    }
+
+    public function testGoGoGoWith200()
+    {
+        $application = new Application([], ['foo' => ['/']]);
+        $application->goGoGo();
+        $this->assertEquals(200, $application->getResponse()->getStatusCode());
+    }
+
+    protected function setUp()
+    {
+    }
+
+    protected function tearDown()
+    {
     }
 
 }
