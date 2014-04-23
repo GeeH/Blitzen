@@ -17,5 +17,8 @@
     "require": {
         "dasprid/dash": "dev-master",
         "zendframework/zend-servicemanager": "2.3.1"
+    },
+    "require-dev": {
+        "codeception/codeception": "*"
     }
 }
